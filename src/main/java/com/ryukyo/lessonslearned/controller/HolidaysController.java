@@ -1,19 +1,23 @@
 package com.ryukyo.lessonslearned.controller;
 
 import com.ryukyo.lessonslearned.model.Holiday;
+import com.ryukyo.lessonslearned.repository.HolidaysRepository;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 
-import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
 @Slf4j
 @Controller
 public class HolidaysController {
+
+    @Autowired
+    private HolidaysRepository holidaysRepository;
 
     @GetMapping("/holidays/{display}")
     public String displayHolidays(@PathVariable String display, Model model) {
@@ -25,16 +29,7 @@ public class HolidaysController {
         }else if(null != display && display.equals("festival")){
             model.addAttribute("festival",true);
         }
-        List<Holiday> holidays = Arrays.asList(
-                new Holiday(" Feb 16 ","Carnival", Holiday.Type.FESTIVAL),
-                new Holiday(" Sep 20 ","World Children Day", Holiday.Type.FESTIVAL),
-                new Holiday(" Oct 31 ","Halloween", Holiday.Type.FESTIVAL),
-                new Holiday(" Dec 24 ","Christmas", Holiday.Type.FESTIVAL),
-                new Holiday(" Jan 1 ","New Year's Day", Holiday.Type.FEDERAL),
-                new Holiday(" Apr 10 ","Easter Monday", Holiday.Type.FEDERAL),
-                new Holiday(" Dec 25 ","1st Christmas Holiday", Holiday.Type.FEDERAL),
-                new Holiday(" Dec 26 ","2nd Christmas Holiday", Holiday.Type.FEDERAL)
-        );
+        List<Holiday> holidays = holidaysRepository.findAllHolidays();
         Holiday.Type[] types = Holiday.Type.values();
         for (Holiday.Type type : types) {
             model.addAttribute(type.toString(),
