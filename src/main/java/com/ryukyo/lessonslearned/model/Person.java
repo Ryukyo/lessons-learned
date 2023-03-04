@@ -36,7 +36,7 @@ public class Person extends BaseEntity{
     private String name;
 
     @NotBlank(message="Mobile number must not be blank")
-    @Pattern(regexp="(^$|[0-9]{10})",message = "Mobile number must be 10 digits")
+    @Pattern(regexp="(^$|[0-9]{10,})",message = "Mobile number must be 10 digits")
     private String mobileNumber;
 
     @NotBlank(message="Email must not be blank")
