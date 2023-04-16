@@ -1,6 +1,18 @@
 package com.ryukyo.lessonslearned.model;
 
-import jakarta.persistence.*;
+import jakarta.persistence.Column;
+import jakarta.persistence.ColumnResult;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.NamedNativeQueries;
+import jakarta.persistence.NamedNativeQuery;
+import jakarta.persistence.NamedQueries;
+import jakarta.persistence.NamedQuery;
+import jakarta.persistence.SqlResultSetMapping;
+import jakarta.persistence.SqlResultSetMappings;
+import jakarta.persistence.Table;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
@@ -10,7 +22,27 @@ import org.hibernate.annotations.GenericGenerator;
 
 @Data
 @Entity
-@Table(name="contact_msg")
+@Table(name = "contact_msg")
+// trying around with named queries
+@SqlResultSetMappings({
+    @SqlResultSetMapping(name = "SqlResultSetMapping.count", columns = @ColumnResult(name = "cnt"))
+})
+@NamedQueries({
+    @NamedQuery(name = "Contact.findOpenMsgs",
+        query = "SELECT c FROM Contact c WHERE c.status = :status"),
+    @NamedQuery(name = "Contact.updateMsgStatus",
+        query = "UPDATE Contact c SET c.status = ?1 WHERE c.contactId = ?2")
+})
+@NamedNativeQueries({
+    @NamedNativeQuery(name = "Contact.findOpenMsgsNative",
+        query = "SELECT * FROM contact_msg c WHERE c.status = :status"
+        , resultClass = Contact.class),
+    @NamedNativeQuery(name = "Contact.findOpenMsgsNative.count",
+        query = "select count(*) as cnt from contact_msg c where c.status = :status",
+        resultSetMapping = "SqlResultSetMapping.count"),
+    @NamedNativeQuery(name = "Contact.updateMsgStatusNative",
+        query = "UPDATE contact_msg c SET c.status = ?1 WHERE c.contact_id = ?2")
+})
 public class Contact extends BaseEntity {
     @Id
     @GeneratedValue(strategy= GenerationType.AUTO,generator="native")
