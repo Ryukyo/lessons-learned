@@ -18,7 +18,8 @@ public interface ContactRepository extends PagingAndSortingRepository<Contact, I
 
   List<Contact> findByStatus(String status);
 
-  Page<Contact> findByStatus(String status, Pageable pageable);
+  @Query("SELECT c FROM Contact c WHERE c.status = :status")
+  Page<Contact> findByStatusWithQuery(@Param("status") String status, Pageable pageable);
 
   @Transactional
   @Modifying
