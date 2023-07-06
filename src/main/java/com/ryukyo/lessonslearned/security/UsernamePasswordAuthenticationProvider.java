@@ -3,7 +3,10 @@ package com.ryukyo.lessonslearned.security;
 import com.ryukyo.lessonslearned.model.Person;
 import com.ryukyo.lessonslearned.model.Roles;
 import com.ryukyo.lessonslearned.repository.PersonRepository;
+import java.util.ArrayList;
+import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Profile;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -14,10 +17,8 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
-import java.util.ArrayList;
-import java.util.List;
-
 @Component
+@Profile("prod")
 public class UsernamePasswordAuthenticationProvider
         implements AuthenticationProvider
 {
